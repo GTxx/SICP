@@ -1,6 +1,7 @@
 #lang racket
 
 ;;this function is to get sqrt of x
+;;to test git diff
 (define (m-sqrt x)
   (define (good-enough? guess guess1)
     (< (abs (- guess guess1)) 0.001))
