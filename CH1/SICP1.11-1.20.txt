@@ -69,4 +69,44 @@ b)时间和空间效率？
             (expt-iter (- m 1) b2 (* brem b)))))
   (expt-iter n b 1))
 
+练习1.17 练习1.18
+这两个跟求幂的差不多，就不记录了。
+
+练习1.19
+Tpq 当2次计算的p= p*p + q*q, q=2pq+q*q
+
+练习1.20
+应用序求了4次remainder。
+正则序先不求值，而是展开。
+(gcd 206 40)的展开没有remainder的计算。并进入(gcd 40 (rem 206 40))
+(gcd 40 (rem 206 40))的展开在(= b 0)做了一次rem计算，并展开为:
+(gcd (rem 206 40) 
+     (rem 40 (rem 206 40)))
+
+(gcd (rem 206 40) 
+     (rem 40 (rem 206 40)))
+b=(rem 40 (rem 206 40))),在(= b 0)处做了2次rem计算。并展开为:
+(gcd (rem 40 (rem 206 40)) 
+     (rem (rem 206 40) 
+          (rem 40 (rem 206 40))))
+
+(gcd (rem 40 (rem 206 40)) 
+     (rem (rem 206 40) 
+          (rem 40 (rem 206 40))))
+b=(rem (rem 206 40) 
+          (rem 40 (rem 206 40)))),在(= b 0)处做了4次rem计算。并展开为:
+(gcd (rem (rem 206 40) 
+          (rem 40 (rem 206 40)))
+     (rem (rem 40 (rem 206 40)) 
+          (rem (rem 206 40) 
+               (rem 40 (rem 206 40)))))
+
+(gcd (rem (rem 206 40) 
+          (rem 40 (rem 206 40)))
+     (rem (rem 40 (rem 206 40)) 
+          (rem (rem 206 40) 
+               (rem 40 (rem 206 40))))),在(= b 0)处做了7次rem计算。这时候b=0成立，返回a，a还要计算4次rem。
+
+综上所述，一共要1+2+4+7+4=18次rem计算。
+
 
