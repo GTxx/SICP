@@ -46,3 +46,5 @@
                          (safe? 3 '(1 3 5))
                          (safe? 3 '(1 2 3))
                          (safe? 3 '(1 3 2))))
+
+(define test-queen (queen 8))
