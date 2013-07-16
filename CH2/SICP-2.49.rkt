@@ -1,0 +1,71 @@
+#lang racket
+
+(require racket/draw)
+(require "SICP-2.46.rkt")
+(require "SICP-2.47.rkt")
+(require "SICP-2.48.rkt")
+(provide frame-coord-map segment->painter draw-to-bitmap wave)
+;;exercise 2.49
+
+(define (frame-coord-map frame)
+  (lambda (v)
+    (add-vect (origin-frame frame)
+              (add-vect (scale-vect (edge1-frame frame) (xcor-vect v))
+                        (scale-vect (edge2-frame frame) (ycor-vect v))))))
+
+(define (segment->painter seg-lst)
+  (lambda (frame)
+    (map (lambda (seg)
+           (make-segment ((frame-coord-map frame) (start-segment seg))
+                         ((frame-coord-map frame) (end-segment seg))))
+              seg-lst)))
+
+(define frame11 (make-frame (make-vect 0 0) (make-vect 1 0) (make-vect 0 1)))
+
+(define a (segment->painter (list (make-segment (make-vect 0 0) (make-vect 0 1))
+                                  (make-segment (make-vect 0 1) (make-vect 1 1))
+                                  (make-segment (make-vect 1 1) (make-vect 1 0))
+                                  (make-segment (make-vect 1 0) (make-vect 0 0)))))
+
+(define b (segment->painter (list (make-segment (make-vect 0 0) (make-vect 1 1))
+                                  (make-segment (make-vect 0 1) (make-vect 1 0)))))
+
+(define c (segment->painter (list (make-segment (make-vect 0 0.5) (make-vect 0.5 1))
+                                  (make-segment (make-vect 0.5 1) (make-vect 1 0.5))
+                                  (make-segment (make-vect 1 0.5) (make-vect 0.5 0))
+                                  (make-segment (make-vect 0.5 0) (make-vect 0 0.5)))))
+
+(define wave (segment->painter (list (make-segment (make-vect 0 0.9) (make-vect 0.2 0.7))
+                                     (make-segment (make-vect 0.2 0.7) (make-vect 0.4 0.7))
+                                     (make-segment (make-vect 0.4 0.7) (make-vect 0.3 0.9))
+                                     (make-segment (make-vect 0.3 0.9) (make-vect 0.4 1))
+                                     (make-segment (make-vect 0 0.7) (make-vect 0.35 0.5))
+                                     (make-segment (make-vect 0.35 0.5) (make-vect 0.3 0))
+                                     (make-segment (make-vect 0.4 0) (make-vect 0.5 0.3))
+                                     (make-segment (make-vect 0.5 0.3) (make-vect 0.6 0))
+                                     (make-segment (make-vect 0.7 0) (make-vect 0.65 0.5))
+                                     (make-segment (make-vect 0.65 0.5) (make-vect 1 0.1))
+                                     (make-segment (make-vect 1 0.3) (make-vect 0.8 0.7))
+                                     (make-segment (make-vect 0.8 0.7) (make-vect 0.6 0.7))
+                                     (make-segment (make-vect 0.6 0.7) (make-vect 0.7 0.9))
+                                     (make-segment (make-vect 0.7 0.9) (make-vect 0.6 1)))))
+
+(define (draw-to-bitmap width height painter file)
+  (let ((target (make-bitmap width height)))
+    (let ((dc (new bitmap-dc% (bitmap target)))
+          (coord-map-painting (painter (make-frame (make-vect 0 0) 
+                                                   (make-vect (- width 1) 0) 
+                                                   (make-vect 0 (- height 1))))))
+      (for-each (lambda (segment)
+                  (send dc draw-line (xcor-vect (start-segment segment))
+                        (ycor-vect (start-segment segment))
+                        (xcor-vect (end-segment segment))
+                        (ycor-vect (end-segment segment))))
+                coord-map-painting)
+      (send target save-file file 'png))))
+
+;;test
+;(draw-to-bitmap 100 100 a "test1.png")
+;(draw-to-bitmap 100 100 b "test2.png")
+;(draw-to-bitmap 100 100 c "test3.png")
+;(draw-to-bitmap 100 100 wave "test4.png")
