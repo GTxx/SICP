@@ -124,3 +124,14 @@ tow就是对x做了2次f处理。如果用替换模型，结果也确实如此�
 (lambda (x) (f (f x)))
 
 那这些church计数其实可以用于生成函数的重复，类似练习1.43的（repeat f），太神奇了！！牛逼！！
+
+还可以再扩展一下，构造church计数的乘法。按照church计数的规律，乘法就是f函数的次数相乘。
+例如
+(mul two tow)
+结果应该是：
+(lambda (f) (lambda (x) (f(f(f(f x))))))
+可以看到，对于(mul n1 n2),只要令n1的参数f等于n2的(lambda (x) (f (f ...(f x)))))就可以了。
+所以这样构造church乘法：
+(define (mul n1 n2)
+  (lambda (f) (n1 (n2 f))))
+
