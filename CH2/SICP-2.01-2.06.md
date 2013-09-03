@@ -1,5 +1,6 @@
 练习2.1
 把make-rat改成这样就行：
+```lisp
 (define (make-rat n d)
   (let ((g (gcd n d)))
     (let ((n1 (/ n g))
@@ -7,7 +8,7 @@
       (if (negative? d1)
           (cons (- n1) (- d1))
           (cons n1 d1)))))
-
+```
 racket里面自带了gcd，节省了自己写的时间。
 而且这里还有一个比较有意思的地方，如果分子是0，分母不为0，那么gcd求出来的是分母，所以最后化简得到的是0/1
 
