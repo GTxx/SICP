@@ -1,6 +1,6 @@
 练习2.1
 把make-rat改成这样就行：
-```lisp
+```racket
 (define (make-rat n d)
   (let ((g (gcd n d)))
     (let ((n1 (/ n g))
