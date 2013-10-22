@@ -24,7 +24,7 @@ n=10类似。
 在接下来的子树中还要再判断一次，所以时间要*2.
 
 对于2.71的例子，生成的huffman树如下：
-```
+```racket
 > (generate-huffman-tree '((a 16) (b 8) (c 4) (d 2) (e 1)))
 '(((((leaf e 1) (leaf d 2) (e d) 3) (leaf c 4) (e d c) 7) (leaf b 8) (e d c b) 15) (leaf a 16) (e d c b a) 31)
 ```
